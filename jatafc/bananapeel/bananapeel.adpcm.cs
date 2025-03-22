@@ -64,14 +64,17 @@ namespace jatafc
 					{
 						var pcmSample = pcm16[sampleIndex] / pcmDivisor;
 						var differential = (pcmSample - copyLast);
-						var diff2 = (int)Math.Round((float)differential / (1 << scale)); // Calculate floating point component						
+						var diff2 = (int)Math.Round((float)differential / (1 << scale)); 					
 
+
+						// differential out of bounds (signed 4 bit)
 						if (diff2 > 7 || diff2 < -8)
-							break; // this scale is too fat.
+							break; 
 
 						var sampleDecoded = decodeADPCMSample(diff2, coefIndex, scale, copyLast, copyPenult);
+						// decoded sample was outside of 16 bit boundary (clip)
 						if (isInvalidSigned16(sampleDecoded))
-							break; // scale clipped
+							break; 
 
 						var error = Math.Abs(pcmSample - sampleDecoded);
 						current_error += error;
@@ -87,17 +90,17 @@ namespace jatafc
 						best_error = current_error;
 					}
 				}
-
+				// Coefficient is overridden by encoder
 				if (forceCoefOn)
-					break; // exit loop, we already have the best coef C:
+					break; 
 			}
 
 			if (bestCoefficientIndex < 0 || bestScale < 0)
 			{
 				pcmDivisor++;
 				if (pcmDivisor > 10)
-					throw new Exception("Failed to solve for frame coefficient d=10");
-				message($"failed to solve coefficient\ntrying again d={pcmDivisor}");
+					throw new Exception($"Failed to solve for frame coefficient. divisor={pcmDivisor}");
+				message($"failed to solve coefficient\ntrying again devisor={pcmDivisor}");
 				goto retrySolveFrame;
 			}
 

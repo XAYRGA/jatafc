@@ -44,7 +44,7 @@ namespace jatafc
                 return;
             }
 
-            var oft = Path.GetDirectoryName(inFile) + "/" + Path.GetFileNameWithoutExtension(inFile) + ".ast";
+            var oft = Path.GetDirectoryName(inFile) + "/" + Path.GetFileNameWithoutExtension(inFile) + ".afc";
             var outFile = cmdarg.tryArg(1, $"Output file, assuming {oft}");
             if (outFile == null)
                 outFile = oft;
