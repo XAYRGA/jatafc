@@ -396,3 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/publish_win64
+/publish_linux64
+*.zip
+*.afc
